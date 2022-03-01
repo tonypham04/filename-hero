@@ -3,17 +3,20 @@ import re
 
 def main():
     """The main function which executes the script"""
-    files = remove_hidden_files(os.listdir())
+    files = os.listdir()
     remove_spaces(files, '-')
 
-def remove_hidden_files(all_files: list[str]) -> list[str]:
-    """This function accepts a list of filenames and returns a new list of file names excluding hidden files."""
+def get_unhidden_files_only(all_files: list[str]) -> list[str]:
+    """This function accepts a list of filenames and returns a new list of filenames excluding hidden files."""
     # List comprehension which returns the list of files without ones beginning with a '.' (i.e. hidden files)
     return [file for file in all_files if not file.startswith('.')]
 
-def remove_spaces(all_files: list[str], delimiter: str) -> list[str]:
+def remove_spaces(all_files: list[str], delimiter: str, exclude_hidden_files=True) -> None:
     """This function replaces spaces in a list of filenames with a specified delimiter"""
+    if exclude_hidden_files:
+        all_files = get_unhidden_files_only(all_files)
     for file in all_files:
+        # Regex expression to replace all instances of spaces with the specified delimeter
         new_name = re.sub(r'\s', delimiter, file)
         os.rename(file, new_name)
 
