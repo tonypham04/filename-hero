@@ -20,6 +20,19 @@ def remove_spaces(all_files: list[str], delimiter: str, exclude_hidden_files=Tru
         new_name = re.sub(r'\s', delimiter, file)
         os.rename(file, new_name)
 
+def remove_prefix(prefix: str, filename: str) -> str:
+    """This function removes a specified prefix from a non-hidden filename."""
+    new_filename = filename
+    # Guard: Check if the filename starts with '.' in which case throw an exception
+    if filename.startswith('.'):
+        raise ValueError('Removing prefix from a hidden file')
+    # Find if the specified pattern exist at the start string
+    if filename.startswith(prefix):
+    # Remove the specified pattern at the start of the string
+        new_filename = re.sub('^'+ prefix, "", filename)
+    # Remove any leading and trailing white space and return
+    return new_filename.strip()
+
 # This is a useful guard to ensure code is only executed when it is being run as the main program and not when imported into another module
 if __name__ == '__main__':
     main()
